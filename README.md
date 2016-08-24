@@ -2,18 +2,16 @@
 
 Jonathan H. Silvia L., Data Mining, Mentor: David Shan
 
-We plan to analyze the type of food people want to eat and at what time they want to eat
-this food so that we can create a personalized menu that fits some person's taste. We
-would also create a database on a person's calorie intake.
+We plan to gather many different tweets that are about the candidates for this years upcoming presidential election.
+We will identify postive and negative tweets concerning both candidates and compare them to each other to find out
+which of them is the most popular.
 
-Stage 1: 
-Gather data on time, taste, calories, and type of food. 
+Stage 1:
+Get the data from twitter with keywords pertaining to the 2016 presidential candidates.
 
 Stage 2:
-Start with recommendations of a single type of food, depending on the user's input. 
+Identify if those tweets are postive or negative. As we identify positive and negative tweets, we can create list 
+of postive and negative keywords.
 
 Stage 3:
-Recommends an entire meal.
-
-Stage 4: 
-Find an affordable price range. 
+Compare the candidates data and find out which one is the most popular.
