@@ -15,3 +15,8 @@ of postive and negative keywords.
 
 Stage 3:
 Compare the candidates data and find out which one is the most popular.
+
+Stage 4:
+Get the age and gender of users and plot them in some sort of graph so that we can see how any men or women prefer
+a certain candidate and how old they are.
+
