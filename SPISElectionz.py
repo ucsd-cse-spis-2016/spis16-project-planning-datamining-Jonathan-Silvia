@@ -1,7 +1,7 @@
 import tweepy
-import numpy
 import string
 from collections import defaultdict
+from textblob import TextBlob
 
 auth = tweepy.OAuthHandler('7iEimQyicVavG5uTVxCCR8G1t', 'rK5xYEgyE5bW2tP0LkG9YrGFRAX3peqLXJw48LUvTtCcbuB7fz')
 auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0INflrYeTpkdU9hVsoCf5uAbE54AqAGgRof7wf2RLaiBa')
@@ -53,13 +53,15 @@ for f in followers:
     api.create_friendship(f)'''
 
 
-
-
-
 def getStatus(user):
     '''returns tweet as a string'''
     scname = api.get_user(user)
     return (scname.status.text).encode('utf-8')
+
+def sentimentOfStatus(user):
+    '''returns sentiment of user's latest tweet'''
+    tweet = TextBlob(getStatus(user))
+    return tweet.sentiment
 
 def listOfWords(status):
     '''returns a list of words (in lower-case) from tweets from a user
@@ -114,17 +116,19 @@ def wordCounts(dict):
     return wordCount
 
 def wordList(list):
+    '''creates a list of words, pair with wordCounts function'''
     words = [w[1] for w in list[:1000]]
     return words
 
 def feature(datum):
-  feat = [0]*len(words)
-  r = text_to_wordlist(datum)
-  for w in r:
-    if w in words:
-      feat[wordId[w]] += 1
-  feat.append(1) #offset
-  return feat
+    '''sets up array of word occurences'''
+    feat = [0]*len(words)
+    r = text_to_wordlist(datum)
+    for w in r:
+        if w in words:
+            feat[wordId[w]] += 1
+    feat.append(1) #offset
+    return feat
         
 
 #Returns tweets that match a specified query.
