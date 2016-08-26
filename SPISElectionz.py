@@ -51,7 +51,7 @@ for f in followers:
 
 def getStatus(user):
     '''returns tweet as a string'''
-    api.get_user(user)
+    scname = api.get_user(user)
     return str(scname.status.text)
 
 def listOfWords(user):
