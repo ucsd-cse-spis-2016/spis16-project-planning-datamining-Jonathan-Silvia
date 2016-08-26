@@ -39,8 +39,8 @@ for status in tweepy.Cursor(api.friends_timeline).items(200):
     process_status(status)'''
 
 #Prints out users timeline with speciefied count
-'''stuff = api.user_timeline(screen_name = 'realDonaldTrump', count = 5)
-print stuff'''
+stuff = api.user_timeline(screen_name = 'realDonaldTrump', count = 5)
+#print stuff
 
 #Follow all of the specified users followes. Will lock you out if you do too
 #much though :c
@@ -49,6 +49,9 @@ print stuff'''
 for f in followers:
     api.create_friendship(f)'''
 
+
+
+
 def getStatus(user):
     '''returns tweet as a string'''
     scname = api.get_user(user)
@@ -56,29 +59,44 @@ def getStatus(user):
 
 def listOfWords(user):
     '''returns a list of words (in lower-case) from tweets from a user
-        still has punctuation though :-('''
+        without punctuation :-)'''
     api.get_user(user)
     words = getStatus(user).split()
     lowerWords = []
     for w in words:
-        lowerWords.append(w.lower())
+        lowerWords.append(noPunct(w.lower()))
     return lowerWords
+
+def listOfStatuses(user, num):
+    '''returns list of statuses from a user'''
+    listOfTweets = []
+    stuff = api.user_timeline(screen_name = user, count = num)
+    for s in stuff:
+        listOfTweets.append(str(s.text))
+    return listOfTweets
+
+def noPunct(word):
+    '''removes punctuation from a word'''
+    chars = [c for c in word if c not in string.punctuation]
+    noPunc = ''.join(chars)
+    return noPunc 
+    
 
 #Returns tweets that match a specified query.
 #API.search(q[, lang][, locale][, rpp][, page][, since_id][, geocode][, show_user])
 
 
 '''===================================================================
-Useful Things for Sentiment Analysis
+Useful Things for Sentiment Analysis!!
 
 import string
 string.punctuation => list of punctuation
 
 Splitting words into characters without punctuation:
-eg. dchar = (c for c in dchar if c not in string.punctuation)
+    eg. dchar = [c for c in dchar if c not in string.punctuation]
 
 Putting it back together:
-eg. dnopunct = ''.join(dchar)
+    eg. dnopunct = ''.join(dchar)
 
 ?linear regression? 
 
