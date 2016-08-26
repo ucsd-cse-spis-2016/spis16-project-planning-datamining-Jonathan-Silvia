@@ -1,5 +1,7 @@
 import tweepy
+import numpy
 import string
+from collections import defaultdict
 
 auth = tweepy.OAuthHandler('7iEimQyicVavG5uTVxCCR8G1t', 'rK5xYEgyE5bW2tP0LkG9YrGFRAX3peqLXJw48LUvTtCcbuB7fz')
 auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0INflrYeTpkdU9hVsoCf5uAbE54AqAGgRof7wf2RLaiBa')
@@ -84,7 +86,7 @@ def noPunct(word):
     return noPunc
 
 def search(query, num):
-    '''returns statuses that contain query'''
+    '''returns list of words from tweets that contain query'''
     listOfTweets = []
     words = []
     stuff = api.search(query, count = num)
@@ -92,7 +94,38 @@ def search(query, num):
         listOfTweets.append((s.text).encode('utf-8'))
     for l in listOfTweets:
         words.append(listOfWords(l))
-    return words 
+    return words
+
+def countWords(listOfWords):
+    '''returns defaultdict counting the occurance of each word'''
+    wordCountDict = defaultdict(int)
+    for l in listOfWords:
+        for w in l:
+            if w[0:4] != 'http':
+                wordCountDict[w] += 1
+    return wordCountDict
+
+def wordCounts(dict):
+    '''returns a list of words in ascending order based on how often they
+        occur'''
+    wordCount = [[dict[w],w] for w in dict]
+    wordCount.sort()
+    wordCount.reverse()
+    return wordCount
+
+def wordList(list):
+    words = [w[1] for w in list[:1000]]
+    return words
+
+def feature(datum):
+  feat = [0]*len(words)
+  r = text_to_wordlist(datum)
+  for w in r:
+    if w in words:
+      feat[wordId[w]] += 1
+  feat.append(1) #offset
+  return feat
+        
 
 #Returns tweets that match a specified query.
 #API.search(q[, lang][, locale][, rpp][, page][, since_id][, geocode][, show_user])
