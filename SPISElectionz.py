@@ -54,6 +54,14 @@ for status in tweepy.Cursor(api.friends_timeline).items(200):
 for f in followers:
     api.create_friendship(f)'''
 
+hashtags = ["#election2016", "#trump", "#clinton", "#democrats", "#republicans", "#jillstein", "#garyjohnson", "greenparty", "libertarians", "weloveharambe"\
+                    "#harambe", "harambe"]
+commonWords = ["election2016", "trump", "clinton", "hillary", "hillary", "clinton", "democrats", "republicans", "jillstein", "garyjohnson", "greenparty", "libertarians", "weloveharambe"\
+                "harambe", "harambe", "hillaryclinton", "realdonaldtrump", "govgaryjohnson", "drjillstein", "|", "rt", "a", "about", "above", "above", "across", "after", "afterwards", \
+               "again", "against", "all", "almost", "alone", "along", "already", "also","although","always","am","among", "amongst", "amoungst", "amount",  "an",\
+               "and", "another", "any","anyhow","anyone","anything","anyway", "anywhere", "are", "around", "as",  "at", "back","be","became", "because","become",\
+               "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "below", "beside", "besides", "between", "beyond", "bill", "both", "bottom","but", "by", "call", "can", "cannot", "cant", "co", "con", "could", "couldnt", "cry", "de", "describe", "detail", "do", "done", "down", "due", "during", "each", "eg", "eight", "either", "eleven","else", "elsewhere", "empty", "enough", "etc", "even", "ever", "every", "everyone", "everything", "everywhere", "except", "few", "fifteen", "fify", "fill", "find", "fire", "first", "five", "for", "former", "formerly", "forty", "found", "four", "from", "front", "full", "further", "get", "give", "go", "had", "has", "hasnt", "have", "he", "hence", "her", "here", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "him", "himself", "his", "how", "however", "hundred", "ie", "if", "in", "inc", "indeed", "interest", "into", "is", "it", "its", "itself", "keep", "last", "latter", "latterly", "least", "less", "ltd", "made", "many", "may", "me", "meanwhile", "might", "mill", "mine", "more", "moreover", "most", "mostly", "move", "much", "must", "my", "myself", "name", "namely", "neither", "never", "nevertheless", "next", "nine", "no", "nobody", "none", "noone", "nor", "not", "nothing", "now", "nowhere", "of", "off", "often", "on", "once", "one", "only", "onto", "or", "other", "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own","part", "per", "perhaps", "please", "put", "rather", "re", "same", "see", "seem", "seemed", "seeming", "seems", "serious", "several", "she", "should", "show", "side", "since", "sincere", "six", "sixty", "so", "some", "somehow", "someone", "something", "sometime", "sometimes", "somewhere", "still", "such", "system", "take", "ten", "than", "that", "the", "their", "them", "themselves", "then", "thence", "there", "thereafter", "thereby", "therefore", "therein", "thereupon", "these", "they", "thickv", "thin", "third", "this", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "top", "toward", "towards", "twelve", "twenty", "two", "un", "under", "until", "up", "upon", "us", "very", "via", "was", "we", "well", "were", "what", "whatever", "when", "whence", "whenever", "where", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whoever", "whole", "whom", "whose", "why", "will", "with", "within", "without", "would", "yet", "you", "your", "yours", "yourself", "yourselves", "the"]
+
 
 def getStatus(user):
     '''returns tweet as a string'''
@@ -125,7 +133,7 @@ def wordCounts(dict):
 
 def wordList(list):
     '''creates a list of words, pair with wordCounts function'''
-    words = [w[1] for w in list[:1000]]
+    words = []
     return words
 
 def feature(datum):
@@ -147,19 +155,49 @@ def sentimentOfStatuses(list):
     return sentimentList
 
 def avgPolarity(listOfPolarity):
+    '''returns the average polarity'''
     polarity = []
     for t in listOfPolarity:
         polarity.append(t[0])
     return (sum(polarity))/len(listOfPolarity)
+
+def checkWord(list):
+    if list[0][1] not in commonWords:
+        return list[0][1]
+    else:
+        checkWord(list[1:len(list)])
+
+def wordID(listOfStatuses):
+    '''FINISH THIS!!!!!!!!!'''
+    splitList = []
+    for s in listOfStatuses:
+        splitList.append(s.split())
+    l = wordCounts(countWords(splitList))
+
+    topWords = []
+    for e in l:
+        if len(topWords) == 10:
+            break
+        if (e[1] not in commonWords) and (e[1] not in hashtags) and (e[1][0] != '@') and (e[1][0] != '#'):
+            topWords.append(e[1])
+    return topWords
+            
+        
 
 #Returns tweets that match a specified query.
 #API.search(q[, lang][, locale][, rpp][, page][, since_id][, geocode][, show_user])
 
 if __name__ == "__main__":
 
-    while True:
+    #while True:
 
         current_time = datetime.datetime.now().time()
+
+        statusHillary = []
+        statusTrump = []
+        statusGary = []
+        statusJill = []
+        statusHarambe = []
         
         hillary = []
         trump = []
@@ -180,28 +218,33 @@ if __name__ == "__main__":
         
         for t in j:
             if ("hillary" in t[0]) or ("clinton" in t[0]) or ("@hillaryclinton" in t[0]):
+                statusHillary.append(noPunct(t[0].encode('utf-8')))
                 if t[1][0] != 0.0 and t[1][1] != 0.0:
                     hillary.append(t[1])
             if ("trump" in t[0]) or ("donald" in t[0]) or ("@realdonaldtrump" in t[0]):
+                statusTrump.append(noPunct(t[0].encode('utf-8')))
                 if t[1][0] != 0.0 and t[1][1] != 0.0:
                     trump.append(t[1])
             if ("gary" in t[0]) or ("johnson" in t[0]) or ("@govgaryjohnson" in t[0]):
+                statusGary.append(noPunct(t[0].encode('utf-8')))
                 if t[1][0] != 0.0 and t[1][1] != 0.0:
                     gary.append(t[1])
             if ("jill" in t[0]) or ("stein" in t[0]) or ("@drjillstein" in t[0]):
+                statusJill.append(noPunct(t[0].encode('utf-8')))
                 if t[1][0] != 0.0 and t[1][1] != 0.0:
                     jill.append(t[1])
             if ("harambe" in t[0]):
+                statusHarambe.append(noPunct(t[0].encode('utf-8')))
                 if t[1][0] != 0.0 and t[1][1] != 0.0:
-                    harambe.append(t[1])
+                    harambe.append(t[1])     
 
                     
-        print "Time:", current_time.isoformat()
-        print "Hillary:", avgPolarity(hillary), "\t\tCount:", len(hillary)
-        print "Trump:", avgPolarity(trump), "\t\tCount:", len(trump)
-        print "Gary:", avgPolarity(gary), "\t\tCount:", len(gary)
-        print "Jill:", avgPolarity(jill), "\t\tCount:", len(jill)
-        print "Harambe:", avgPolarity(harambe), "\tCount:", len(harambe)
+        print "Time:\n", current_time.isoformat()
+        print "Hillary:", avgPolarity(hillary), "\t\t\tCount:", len(hillary), "\n\nCommon Words:", wordID(statusHillary)
+        print "Trump:", avgPolarity(trump), "\t\t\tCount:", len(trump), "\n\nCommon Words:", wordID(statusTrump)
+        print "Gary:", avgPolarity(gary), "\t\t\tCount:", len(gary), "\n\nCommon Words:", wordID(statusGary)
+        print "Jill:", avgPolarity(jill), "\t\t\tCount:", len(jill), "\n\nCommon Words:", wordID(statusJill)
+        print "Harambe:", avgPolarity(harambe), "\t\tCount:", len(harambe), "\n\nCommon Words:", wordID(statusHarambe)
         print "==============================================="
 
         time.sleep(60)
