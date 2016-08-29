@@ -1,4 +1,6 @@
 import tweepy
+import time
+import datetime
 import string
 from collections import defaultdict
 from textblob import TextBlob
@@ -56,11 +58,16 @@ for f in followers:
 def getStatus(user):
     '''returns tweet as a string'''
     scname = api.get_user(user)
-    return (scname.status.text).encode('utf-8')
+    return (scname.status.text)
 
 def sentimentOfStatus(user):
     '''returns sentiment of user's latest tweet'''
     tweet = TextBlob(getStatus(user))
+    return tweet.sentiment
+
+def sentimentOfTweet(string):
+    '''returns sentiment of a given string'''
+    tweet = TextBlob(string.lower())
     return tweet.sentiment
 
 def listOfWords(status):
@@ -93,10 +100,11 @@ def search(query, num):
     words = []
     stuff = api.search(query, count = num)
     for s in stuff:
-        listOfTweets.append((s.text).encode('utf-8'))
-    for l in listOfTweets:
+        listOfTweets.append(s.text.lower())
+    '''for l in listOfTweets:
         words.append(listOfWords(l))
-    return words
+    return words'''
+    return listOfTweets
 
 def countWords(listOfWords):
     '''returns defaultdict counting the occurance of each word'''
@@ -129,12 +137,76 @@ def feature(datum):
             feat[wordId[w]] += 1
     feat.append(1) #offset
     return feat
-        
+
+def sentimentOfStatuses(list):
+    '''returns a list of tuples of statuses and their sentiments'''
+    #listOfStatuses = search(query, num)
+    sentimentList = []
+    for s in list:
+        sentimentList.append((s, sentimentOfTweet(s)))
+    return sentimentList
+
+def avgPolarity(listOfPolarity):
+    polarity = []
+    for t in listOfPolarity:
+        polarity.append(t[0])
+    return (sum(polarity))/len(listOfPolarity)
 
 #Returns tweets that match a specified query.
 #API.search(q[, lang][, locale][, rpp][, page][, since_id][, geocode][, show_user])
 
+if __name__ == "__main__":
 
+    while True:
+
+        current_time = datetime.datetime.now().time()
+        
+        hillary = []
+        trump = []
+        gary = []
+        jill = []
+        harambe = []
+
+        hashtags = ["#Election2016", "#Trump", "#Clinton", "#Democrats", "#Republicans", "#JillStein", "#GaryJohnson", "GreenParty", "Libertarians", "WeLoveHarambe"\
+                    "#Harambe", "harambe"]
+
+        list = []
+
+        for h in hashtags:
+            for s in search(h, 50):
+                list.append(s)
+
+        j = sentimentOfStatuses(list)
+        
+        for t in j:
+            if ("hillary" in t[0]) or ("clinton" in t[0]) or ("@hillaryclinton" in t[0]):
+                if t[1][0] != 0.0 and t[1][1] != 0.0:
+                    hillary.append(t[1])
+            if ("trump" in t[0]) or ("donald" in t[0]) or ("@realdonaldtrump" in t[0]):
+                if t[1][0] != 0.0 and t[1][1] != 0.0:
+                    trump.append(t[1])
+            if ("gary" in t[0]) or ("johnson" in t[0]) or ("@govgaryjohnson" in t[0]):
+                if t[1][0] != 0.0 and t[1][1] != 0.0:
+                    gary.append(t[1])
+            if ("jill" in t[0]) or ("stein" in t[0]) or ("@drjillstein" in t[0]):
+                if t[1][0] != 0.0 and t[1][1] != 0.0:
+                    jill.append(t[1])
+            if ("harambe" in t[0]):
+                if t[1][0] != 0.0 and t[1][1] != 0.0:
+                    harambe.append(t[1])
+
+                    
+        print "Time:", current_time.isoformat()
+        print "Hillary:", avgPolarity(hillary), "\t\tCount:", len(hillary)
+        print "Trump:", avgPolarity(trump), "\t\tCount:", len(trump)
+        print "Gary:", avgPolarity(gary), "\t\tCount:", len(gary)
+        print "Jill:", avgPolarity(jill), "\t\tCount:", len(jill)
+        print "Harambe:", avgPolarity(harambe), "\tCount:", len(harambe)
+        print "==============================================="
+
+        time.sleep(60)
+                         
+    
 '''
 ======================================================================
 Useful Things for Sentiment Analysis!!
