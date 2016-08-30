@@ -5,6 +5,7 @@ import numpy
 import string
 from collections import defaultdict
 from textblob import TextBlob
+from PieChartAndBarGraph import realPieChart
 
 auth = tweepy.OAuthHandler('7iEimQyicVavG5uTVxCCR8G1t', 'rK5xYEgyE5bW2tP0LkG9YrGFRAX3peqLXJw48LUvTtCcbuB7fz')
 auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0INflrYeTpkdU9hVsoCf5uAbE54AqAGgRof7wf2RLaiBa')
@@ -148,8 +149,8 @@ def wordID(listOfStatuses):
     for e in l:
         if len(topWords) == 10:
             break
-        if (e[1] not in commonWords) and (e[1] not in hashtags) and (e[1][0] != '@') and (e[1][0] != '#') and (e[1][0] not in string.punctuation):
-            topWords.append(e[1])
+        if (e[1] not in commonWords) and (e[1] not in hashtags) and (e[1][0] != '@') and (e[1][0] != '#') and (e[1][0] != '\\'):
+            topWords.append(noPunct(e[1]))
     return topWords
             
 
@@ -213,6 +214,8 @@ if __name__ == "__main__":
             print "\n\nJill:", avgPolarity(jill), "\t\t\tCount:", len(jill), "\nCommon Words:", wordID(statusJill)
             print "\n\nHarambe:", avgPolarity(harambe), "\t\tCount:", len(harambe), "\nCommon Words:", wordID(statusHarambe)
             print "==============================================="
+
+            realPieChart(hillary, trump, gary, jill)
 
             time.sleep(60)
 
