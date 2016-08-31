@@ -183,7 +183,7 @@ def barGraph(h, t, g, j, hb):
     plt.bar(y_pos, performance, align='center', alpha=0.5)
     plt.xticks(y_pos, objects)
     plt.ylabel('Polarity Rating')
-    plt.title('Popularity of 2016 Election Candidates')
+    plt.title('Sentiment Rating Of Tweets About 2016 Election Candidates')
      
     plt.show()
             
@@ -213,7 +213,7 @@ if __name__ == "__main__":
             list = []
 
             for h in hashtags:
-                for s in search(h, 75):
+                for s in search(h, 100):
                     list.append(s)
 
             j = sentimentOfStatuses(list)
@@ -241,7 +241,7 @@ if __name__ == "__main__":
                         harambe.append(t[1])     
 
                         
-            print "Time:\t", current_time.isoformat()
+            print "Time:\t", current_time.isoformat(), "\n"
             print "Hillary:", avgPolarity(hillary), "\t\t\tCount:", len(hillary), "\nCommon Words:", wordID(statusHillary)
             print "\n\nTrump:", avgPolarity(trump), "\t\t\tCount:", len(trump), "\nCommon Words:", wordID(statusTrump)
             print "\n\nGary:", avgPolarity(gary), "\t\t\tCount:", len(gary), "\nCommon Words:", wordID(statusGary)

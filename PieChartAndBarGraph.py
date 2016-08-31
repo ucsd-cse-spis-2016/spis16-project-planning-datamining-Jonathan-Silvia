@@ -5,13 +5,14 @@ def PieChart(hillary, trump, gary, jill, harambe):
 
     labels = 'Hillary', 'Trump', 'Gary', 'Jill', 'Harambe'
     sizes = [len(hillary), len(trump), len(gary), len(jill), len(harambe)]
-    colors = ['burlywood', 'cornsilk', 'chartreuse', 'lightcoral', 'firebrick']
+    colors = ['burlywood', 'cornsilk', 'lawngreen', 'lightcoral', 'cornflowerblue']
     explode = (0, 0.1, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
 
     plt.pie(sizes, explode=explode, labels=labels, colors=colors,
             autopct='%1.1f%%', shadow=True, startangle=90)
     # Set aspect ratio to be equal so that pie is drawn as a circle.
     plt.axis('equal')
+    plt.title('Percentage of Tweets Mentioning Each Candidate')
 
     #fig = plt.figure()
     plt.show()
