@@ -5,7 +5,7 @@ def PieChart(hillary, trump, gary, jill, harambe):
 
     labels = 'Hillary', 'Trump', 'Gary', 'Jill', 'Harambe'
     sizes = [len(hillary), len(trump), len(gary), len(jill), len(harambe)]
-    colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'firebrick']
+    colors = ['burlywood', 'cornsilk', 'chartreuse', 'lightcoral', 'firebrick']
     explode = (0, 0.1, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
 
     plt.pie(sizes, explode=explode, labels=labels, colors=colors,
@@ -24,11 +24,10 @@ def barGraph(h, t, g, j, hb):
     N = len(y)
     x = range(N)
     width = 1/1.5
-    plt.bar(x, y, width, color="blue")
+    plt.bar(x, y, width, colors=colors)
 
-    
-    plt.show()
     fig = plt.gcf()
+    plt.show()
 
 
 ##    ax.pie(np.random.random(4), explode=explode, labels=labels, colors=colors,

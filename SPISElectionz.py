@@ -176,13 +176,15 @@ def barGraph(h, t, g, j, hb):
 ##    fig = plt.gcf()
 ##    plt.show()
 
-    x = xrange(5)
-    y = [avgPolarity(h), avgPolarity(t), avgPolarity(g), avgPolarity(j), avgPolarity(hb)]
-    plt = plt.figure()
-    ax = f.add_axes([0.1, 0.1, 0.8, 0.8])
-    ax.bar(x, y, align='center')
-    ax.set_xticks(x)
-    ax.set_xticklabels(['H', 't', 'Cee', 'Dee', 'h'])
+    objects = ('Hillary Clinton', 'Donald Trump', 'Gary Johnson', 'Jill Stein', 'Harambe the Gorilla')
+    y_pos = np.arange(len(objects))
+    performance = [avgPolarity(h), avgPolarity(t), avgPolarity(g), avgPolarity(j), avgPolarity(hb)]
+    
+    plt.bar(y_pos, performance, align='center', alpha=0.5)
+    plt.xticks(y_pos, objects)
+    plt.ylabel('Polarity Rating')
+    plt.title('Popularity of 2016 Election Candidates')
+     
     plt.show()
             
 
@@ -248,7 +250,8 @@ if __name__ == "__main__":
             print "===================================================================="
 
             PieChart(hillary, trump, gary, jill, harambe)
-
+            barGraph(hillary, trump, gary, jill, harambe)
+        
             time.sleep(60)
 
     except KeyboardInterrupt:
