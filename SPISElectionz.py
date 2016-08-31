@@ -5,7 +5,7 @@ import numpy
 import string
 from collections import defaultdict
 from textblob import TextBlob
-from PieChartAndBarGraph import realPieChart
+from PieChartAndBarGraph import *
 
 auth = tweepy.OAuthHandler('7iEimQyicVavG5uTVxCCR8G1t', 'rK5xYEgyE5bW2tP0LkG9YrGFRAX3peqLXJw48LUvTtCcbuB7fz')
 auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0INflrYeTpkdU9hVsoCf5uAbE54AqAGgRof7wf2RLaiBa')
@@ -15,7 +15,7 @@ public_tweets = api.home_timeline()
 '''for tweet in public_tweets:
     print tweet.text'''
 
-user = api.get_user('SPISElectionz')
+#user = api.get_user('SPISElectionz')
 
 
 #Follow all of the specified users followes. Will lock you out if you do too
@@ -27,7 +27,7 @@ for f in followers:
 
 hashtags = ["#election2016", "#trump", "#clinton", "#democrats", "#republicans", "#jillstein", "#garyjohnson", "greenparty", "libertarians", "weloveharambe"\
                     "#harambe", "harambe"]
-commonWords = ["election2016", "trump", "clinton", "hillary", "hillary", "clinton", "democrats", "republicans", "jillstein", "garyjohnson", "greenparty", "libertarians", "weloveharambe"\
+commonWords = ["amp", "election2016", "trump", "clinton", "hillary", "hillary", "clinton", "democrats", "republicans", "jillstein", "garyjohnson", "greenparty", "libertarians", "weloveharambe"\
                 "harambe", "harambe", "hillaryclinton", "realdonaldtrump", "govgaryjohnson", "drjillstein", "|", "rt", "a", "about", "above", "above", "across", "after", "afterwards", \
                "again", "against", "all", "almost", "alone", "along", "already", "also","although","always","am","among", "amongst", "amoungst", "amount",  "an",\
                "and", "another", "any","anyhow","anyone","anything","anyway", "anywhere", "are", "around", "as",  "at", "back","be","became", "because","become",\
@@ -48,6 +48,13 @@ def sentimentOfTweet(string):
     '''returns sentiment of a given string'''
     tweet = TextBlob(string.lower())
     return tweet.sentiment
+
+def isntInt(string):
+    try:
+        u = int(string)
+        return False
+    except:
+        return True
 
 def listOfWords(status):
     '''returns a list of words (in lower-case) from tweets from a user
@@ -149,9 +156,34 @@ def wordID(listOfStatuses):
     for e in l:
         if len(topWords) == 10:
             break
-        if (e[1] not in commonWords) and (e[1] not in hashtags) and (e[1][0] != '@') and (e[1][0] != '#') and (e[1][0] != '\\'):
+        if (e[1] not in commonWords) and (len(e[1]) != 1) and (e[1][0] != '@') and (e[1][0] != '#') and (e[1][0] != '\\') and (isntInt(e[1])):
             topWords.append(noPunct(e[1]))
     return topWords
+
+def barGraph(h, t, g, j, hb):
+    
+##    y = [avgPolarity(h), avgPolarity(t), avgPolarity(g), avgPolarity(j), avgPolarity(hb)] 
+##    N = len(y)
+##    x = ["Hillary", "Trump", "Gary", "Jill", "Harambe"]
+##    width = 1/1.5
+##    plt.bar(x, y, width, color="lightcoral")
+##    
+##    plt.ylabel('Candidates')
+##    plt.xlabel('Polarity Rating')
+##    plt.title('2016 Election Candidates and Current Ratings')
+##
+##    #plt.xticklabels(('Hillary Clinton', 'Donald Trump', 'Gary Johnson', 'Jill Stein', 'Harambe the Gorilla'))
+##    fig = plt.gcf()
+##    plt.show()
+
+    x = xrange(5)
+    y = [avgPolarity(h), avgPolarity(t), avgPolarity(g), avgPolarity(j), avgPolarity(hb)]
+    plt = plt.figure()
+    ax = f.add_axes([0.1, 0.1, 0.8, 0.8])
+    ax.bar(x, y, align='center')
+    ax.set_xticks(x)
+    ax.set_xticklabels(['H', 't', 'Cee', 'Dee', 'h'])
+    plt.show()
             
 
 if __name__ == "__main__":
@@ -179,30 +211,30 @@ if __name__ == "__main__":
             list = []
 
             for h in hashtags:
-                for s in search(h, 50):
+                for s in search(h, 75):
                     list.append(s)
 
             j = sentimentOfStatuses(list)
             
             for t in j:
                 if ("hillary" in t[0]) or ("clinton" in t[0]) or ("@hillaryclinton" in t[0]):
-                    statusHillary.append(t[0].encode('utf-8'))
+                    statusHillary.append(str(TextBlob(t[0])))
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         hillary.append(t[1])
                 if ("trump" in t[0]) or ("donald" in t[0]) or ("@realdonaldtrump" in t[0]):
-                    statusTrump.append(t[0].encode('utf-8'))
+                    statusTrump.append(str(TextBlob(t[0])))
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         trump.append(t[1])
                 if ("gary" in t[0]) or ("johnson" in t[0]) or ("@govgaryjohnson" in t[0]):
-                    statusGary.append(t[0].encode('utf-8'))
+                    statusGary.append(str(TextBlob(t[0])))
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         gary.append(t[1])
                 if ("jill" in t[0]) or ("stein" in t[0]) or ("@drjillstein" in t[0]):
-                    statusJill.append(t[0].encode('utf-8'))
+                    statusJill.append(str(TextBlob(t[0])))
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         jill.append(t[1])
                 if ("harambe" in t[0]):
-                    statusHarambe.append(t[0].encode('utf-8'))
+                    statusHarambe.append(str(TextBlob(t[0])))
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         harambe.append(t[1])     
 
@@ -213,9 +245,9 @@ if __name__ == "__main__":
             print "\n\nGary:", avgPolarity(gary), "\t\t\tCount:", len(gary), "\nCommon Words:", wordID(statusGary)
             print "\n\nJill:", avgPolarity(jill), "\t\t\tCount:", len(jill), "\nCommon Words:", wordID(statusJill)
             print "\n\nHarambe:", avgPolarity(harambe), "\t\tCount:", len(harambe), "\nCommon Words:", wordID(statusHarambe)
-            print "==============================================="
+            print "===================================================================="
 
-            realPieChart(hillary, trump, gary, jill)
+            PieChart(hillary, trump, gary, jill, harambe)
 
             time.sleep(60)
 
