@@ -17,7 +17,6 @@ public_tweets = api.home_timeline()
 
 #user = api.get_user('SPISElectionz')
 
-
 #Follow all of the specified users followes. Will lock you out if you do too
 #much though :c
 '''followers = api.followers_ids('realDonaldTrump')
@@ -27,12 +26,11 @@ for f in followers:
 
 hashtags = ["#election2016", "#trump", "#clinton", "#democrats", "#republicans", "#jillstein", "#garyjohnson", "greenparty", "libertarians", "weloveharambe"\
                     "#harambe", "harambe"]
-commonWords = ["amp", "election2016", "trump", "clinton", "hillary", "hillary", "clinton", "democrats", "republicans", "jillstein", "garyjohnson", "greenparty", "libertarians", "weloveharambe"\
-               "harambe", "hillaryclinton", "realdonaldtrump", "govgaryjohnson", "drjillstein", "|", "rt", "a", "about", "above", "above", "across", "after", "afterwards", \
+commonWords = ['amp', "amp", "election2016", "trump", "clinton", "hillary", "hillary", "clinton", "democrats", "republicans", "jillstein", "garyjohnson", "greenparty", "libertarians", "weloveharambe"\
+               'harambe', "harambe", "hillaryclinton", "realdonaldtrump", "govgaryjohnson", "drjillstein", "|", "rt", "a", "about", "above", "above", "across", "after", "afterwards", \
                "again", "against", "all", "almost", "alone", "along", "already", "also","although","always","am","among", "amongst", "amoungst", "amount",  "an",\
                "and", "another", "any","anyhow","anyone","anything","anyway", "anywhere", "are", "around", "as",  "at", "back","be","became", "because","become",\
                "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "below", "beside", "besides", "between", "beyond", "bill", "both", "bottom","but", "by", "call", "can", "cannot", "cant", "co", "con", "could", "couldnt", "cry", "de", "describe", "detail", "do", "done", "down", "due", "during", "each", "eg", "eight", "either", "eleven","else", "elsewhere", "empty", "enough", "etc", "even", "ever", "every", "everyone", "everything", "i", "everywhere", "except", "few", "fifteen", "fify", "fill", "find", "fire", "first", "five", "for", "former", "formerly", "forty", "found", "four", "from", "front", "full", "further", "get", "give", "go", "had", "has", "hasnt", "have", "he", "hence", "her", "here", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "him", "himself", "his", "how", "however", "hundred", "ie", "if", "in", "inc", "indeed", "interest", "into", "is", "it", "its", "itself", "keep", "last", "latter", "latterly", "least", "less", "ltd", "made", "many", "may", "me", "meanwhile", "might", "mill", "mine", "more", "moreover", "most", "mostly", "move", "much", "must", "my", "myself", "name", "namely", "neither", "never", "nevertheless", "next", "nine", "no", "nobody", "none", "noone", "nor", "not", "nothing", "now", "nowhere", "of", "off", "often", "on", "once", "one", "only", "onto", "or", "other", "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own","part", "per", "perhaps", "please", "put", "rather", "re", "same", "see", "seem", "seemed", "seeming", "seems", "serious", "several", "she", "should", "show", "side", "since", "sincere", "six", "sixty", "so", "some", "somehow", "someone", "something", "sometime", "sometimes", "somewhere", "still", "such", "system", "take", "ten", "than", "that", "the", "their", "them", "themselves", "then", "thence", "there", "thereafter", "thereby", "therefore", "therein", "thereupon", "these", "they", "thickv", "thin", "third", "this", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "top", "toward", "towards", "twelve", "twenty", "two", "un", "under", "until", "up", "upon", "us", "very", "via", "was", "we", "well", "were", "what", "whatever", "when", "whence", "whenever", "where", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whoever", "whole", "whom", "whose", "why", "will", "with", "within", "without", "would", "yet", "you", "your", "yours", "yourself", "yourselves", "the", 'the']
-
 
 def getStatus(user):
     '''returns tweet as a string'''
@@ -50,6 +48,7 @@ def sentimentOfTweet(string):
     return tweet.sentiment
 
 def isntInt(string):
+    '''determines if a string is not an integer'''
     try:
         u = int(string)
         return False
@@ -87,9 +86,6 @@ def search(query, num):
     stuff = api.search(query, count = num)
     for s in stuff:
         listOfTweets.append(s.text.lower())
-    '''for l in listOfTweets:
-        words.append(listOfWords(l))
-    return words'''
     return listOfTweets
 
 def countWords(listOfWords):
@@ -159,24 +155,11 @@ def wordID(listOfStatuses):
             break
         if (w not in commonWords) and (len(w) > 1) and (e[1][0] != '@') and (e[1][0] != '#') and (isntInt(e[1])):
             if (len(w)) > 0:
-                topWords.append(noPunct(e[1]).decode('unicode_escape').encode('ascii','ignore'))
+                topWords.append(noPunct(w))
     return topWords
 
 def barGraph(h, t, g, j, hb):
-    
-##    y = [avgPolarity(h), avgPolarity(t), avgPolarity(g), avgPolarity(j), avgPolarity(hb)] 
-##    N = len(y)
-##    x = ["Hillary", "Trump", "Gary", "Jill", "Harambe"]
-##    width = 1/1.5
-##    plt.bar(x, y, width, color="lightcoral")
-##    
-##    plt.ylabel('Candidates')
-##    plt.xlabel('Polarity Rating')
-##    plt.title('2016 Election Candidates and Current Ratings')
-##
-##    #plt.xticklabels(('Hillary Clinton', 'Donald Trump', 'Gary Johnson', 'Jill Stein', 'Harambe the Gorilla'))
-##    fig = plt.gcf()
-##    plt.show()
+    '''creates bar graph with all five candidates'''
 
     objects = ('Hillary Clinton', 'Donald Trump', 'Gary Johnson', 'Jill Stein', 'Harambe the Gorilla')
     y_pos = np.arange(len(objects))
@@ -194,32 +177,39 @@ if __name__ == "__main__":
 
     try:
         while True:
-
+            #initializes the current time as a variable
             current_time = datetime.datetime.now().time()
 
+            #initializes lists of each candidates' statuses
             statusHillary = []
             statusTrump = []
             statusGary = []
             statusJill = []
             statusHarambe = []
-            
+
+            #initializes lists of each candidates' sentiment value
             hillary = []
             trump = []
             gary = []
             jill = []
             harambe = []
 
+            #initializes list of hashtags to search
             hashtags = ["#Election2016", "#Trump", "#Clinton", "#Democrats", "#Republicans", "#JillStein", "#GaryJohnson", "GreenParty", "Libertarians", "WeLoveHarambe"\
                         "#Harambe", "harambe"]
 
+            #list variable to be filled with searched tweets
             list = []
 
+            #searches for 100 recent tweets for each item in hashtag
             for h in hashtags:
                 for s in search(h, 100):
                     list.append(s)
 
+            #creates a list of statuses and their sentiment values for each status in list
             j = sentimentOfStatuses(list)
-            
+
+            #appends polarity values of each status to a given candidate's list
             for t in j:
                 if ("hillary" in t[0]) or ("clinton" in t[0]) or ("@hillaryclinton" in t[0]):
                     statusHillary.append(str(TextBlob(t[0])))
@@ -242,7 +232,7 @@ if __name__ == "__main__":
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         harambe.append(t[1])     
 
-                        
+            #prints avg polarity value and tweet count for each candidate            
             print "Time:\t", current_time.isoformat(), "\n"
             print "Hillary:", avgPolarity(hillary), "\t\t\tCount:", len(hillary), "\nCommon Words:", wordID(statusHillary)
             print "\n\nTrump:", avgPolarity(trump), "\t\t\tCount:", len(trump), "\nCommon Words:", wordID(statusTrump)
@@ -251,9 +241,11 @@ if __name__ == "__main__":
             print "\n\nHarambe:", avgPolarity(harambe), "\t\tCount:", len(harambe), "\nCommon Words:", wordID(statusHarambe)
             print "===================================================================="
 
+            #outputs a pie chart and a bar graph
             PieChart(hillary, trump, gary, jill, harambe)
             barGraph(hillary, trump, gary, jill, harambe)
-        
+
+            #waits a minute before refreshing data
             time.sleep(60)
 
     except KeyboardInterrupt:
