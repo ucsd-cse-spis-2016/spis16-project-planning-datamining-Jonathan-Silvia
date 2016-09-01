@@ -3,9 +3,14 @@ import time
 import datetime
 import numpy
 import string
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
 from collections import defaultdict
 from textblob import TextBlob
 from PieChartAndBarGraph import *
+
+plotly.tools.set_credentials_file(username='SPISElectionz', api_key='7ycffzf6wi')
 
 auth = tweepy.OAuthHandler('7iEimQyicVavG5uTVxCCR8G1t', 'rK5xYEgyE5bW2tP0LkG9YrGFRAX3peqLXJw48LUvTtCcbuB7fz')
 auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0INflrYeTpkdU9hVsoCf5uAbE54AqAGgRof7wf2RLaiBa')
@@ -158,6 +163,69 @@ def wordID(listOfStatuses):
                 topWords.append(noPunct(w))
     return topWords
 
+def scatVariable(j):
+    z = []
+    for i in j:
+        if i[1][0] != 0.0:
+            z.append(i[1][0])
+    return z
+
+def sentiVariable(j):
+    y = []
+    for i in j:
+        if i[1][1] != 0.0:
+            y.append(i[1][1])
+    return y
+    
+def polarBar(hillary, trump, gary, jill, harambe):
+    data = [go.Bar(
+                x=['Hillary', 'Trump', 'Gary', 'Jill', 'Harambe'],
+                y=[avgPolarity(hillary), avgPolarity(trump), avgPolarity(gary), avgPolarity(jill), avgPolarity(harambe)]
+        )]
+
+    py.iplot(data, filename='newBasic2-bar')
+
+def newPieChart(hillary, trump, gary, jill, harambe):
+    fig = {
+        'data': [{'labels': ['Hillary', 'Trump', 'Gary', 'Jill', 'Harambe'],
+                  'values': [len(hillary), len(trump), len(gary), len(jill), len(harambe)],
+                  'type': 'pie'}],
+        'layout': {'title': 'Number Of Tweets About Each "Presidential Candidate" for 2016'}
+         }
+
+    py.iplot(fig)
+
+def scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j):
+    x, y, z = (np.array([sentiVariable(j),range((len(hillary) + len(trump) + len(gary) + len(jill) + len(harambe))),scatVariable(j)]))
+   # x=[range(1000)],
+    #y=scatVariable(j),
+    #z=[range(len(hillary)), range(len(trump)), range(len(gary)), range(len(jill)), range(len(harambe))]
+ 
+    trace1 = go.Scatter3d(
+        x=x,
+        y=y,
+        z=z,
+        mode='markers',
+        marker=dict(
+            size=12,
+            color=z,                # set color to an array/list of desired values
+            colorscale='Viridis',   # choose a colorscale
+            opacity=0.8
+        )
+    )
+
+    data = [trace1]
+    layout = go.Layout(
+        margin=dict(
+            l=0,
+            r=0,
+            b=0,
+            t=0
+        )
+    )
+    fig = go.Figure(data=data, layout=layout)
+    py.iplot(fig, filename='scatter-colorscale')
+
 def barGraph(h, t, g, j, hb):
     '''creates bar graph with all five candidates'''
 
@@ -242,10 +310,15 @@ if __name__ == "__main__":
             print "===================================================================="
 
             #outputs a pie chart and a bar graph
-            PieChart(hillary, trump, gary, jill, harambe)
-            barGraph(hillary, trump, gary, jill, harambe)
+            #PieChart(hillary, trump, gary, jill, harambe)
+            #barGraph(hillary, trump, gary, jill, harambe)
 
             #waits a minute before refreshing data
+
+            scatVariable(j)
+            #polarBar(hillary, trump, gary, jill, harambe)
+            scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j)
+            #newPieChart(hillary, trump, gary, jill, harambe)
             time.sleep(60)
 
     except KeyboardInterrupt:
