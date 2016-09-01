@@ -18,6 +18,7 @@ auth.set_access_token('768841306042839040-49QlscNfwnWypo378JH3Euj4LFdxvWK', '0IN
 
 api = tweepy.API(auth)
 public_tweets = api.home_timeline()
+
 '''for tweet in public_tweets:
     print tweet.text'''
 
@@ -165,6 +166,21 @@ def wordID(listOfStatuses):
             topWords.append(noPunct(e[1]))
     return topWords
 
+def scatVariable(j):
+    z = []
+    for i in j:
+        if j[1][0] != 0.0:
+            z.append(i[1][0])
+    return z
+
+def sentiVariable(j):
+    y = []
+    for i in j:
+        if j[1][1] != 0.0:
+            y.append(i[1][1])
+    return y
+    
+
 def polarBar(hillary, trump, gary, jill, harambe):
     data = [go.Bar(
                 x=['Hillary', 'Trump', 'Gary', 'Jill', 'Harambe'],
@@ -183,12 +199,12 @@ def newPieChart(hillary, trump, gary, jill, harambe):
 
     py.iplot(fig)
 
-def scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe):
-    x=[range(1000)],
-    y=[range(j)],
-    z=[range(len(hillary)), range(len(trump)), range(len(gary)), range(len(jill)), range(len(harambe))]
-    #x, y, z = np.random.multivariate_normal(np.array([0,0,0]), np.eye(3), 400).transpose()
-
+def scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j):
+    x, y, z = (np.array([sentiVariable(j),range((len(hillary) + len(trump) + len(gary) + len(jill) + len(harambe))),scatVariable(j)]))
+   # x=[range(1000)],
+    #y=scatVariable(j),
+    #z=[range(len(hillary)), range(len(trump)), range(len(gary)), range(len(jill)), range(len(harambe))]
+ 
     trace1 = go.Scatter3d(
         x=x,
         y=y,
@@ -232,7 +248,7 @@ def barGraph(h, t, g, j, hb):
 if __name__ == "__main__":
 
     try:
-        while True:
+        #while True:
 
             current_time = datetime.datetime.now().time()
 
@@ -281,7 +297,6 @@ if __name__ == "__main__":
                     if t[1][0] != 0.0 and t[1][1] != 0.0:
                         harambe.append(t[1])     
 
-                        
             print "Time:\t", current_time.isoformat(), "\n"
             print "Hillary:", avgPolarity(hillary), "\t\t\tCount:", len(hillary), "\nCommon Words:", wordID(statusHillary)
             print "\n\nTrump:", avgPolarity(trump), "\t\t\tCount:", len(trump), "\nCommon Words:", wordID(statusTrump)
@@ -290,13 +305,14 @@ if __name__ == "__main__":
             print "\n\nHarambe:", avgPolarity(harambe), "\t\tCount:", len(harambe), "\nCommon Words:", wordID(statusHarambe)
             print "===================================================================="
 
+            scatVariable(j)
             PieChart(hillary, trump, gary, jill, harambe)
             barGraph(hillary, trump, gary, jill, harambe)
             polarBar(hillary, trump, gary, jill, harambe)
-            #scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe)
+            scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j)
             newPieChart(hillary, trump, gary, jill, harambe)
         
-            time.sleep(60)
+            #time.sleep(60)
 
     except KeyboardInterrupt:
         raise
