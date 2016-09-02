@@ -183,7 +183,28 @@ def polarBar(hillary, trump, gary, jill, harambe):
                 y=[avgPolarity(hillary), avgPolarity(trump), avgPolarity(gary), avgPolarity(jill), avgPolarity(harambe)]
         )]
 
-    py.iplot(data, filename='newBasic2-bar')
+    layout = go.Layout(
+        title = "Average Sentiment Ratings On Tweets About 2016 Election Candidates",
+        xaxis = dict(
+            title = 'Candidates',
+            titlefont = dict(
+                family = 'Courier New, monospace',
+                size = 23,
+                color = '#000'
+                )
+            ),
+        yaxis = dict(
+            title = 'Polarity Rating',
+            titlefont = dict(
+                family = 'Courier New, monospace',
+                size = 23,
+                color = '#000'
+                )
+            )
+        )
+
+    fig = go.Figure(data=data, layout=layout)
+    py.iplot(fig, filename='newBasic2-bar')
 
 def newPieChart(hillary, trump, gary, jill, harambe):
     fig = {
@@ -193,7 +214,8 @@ def newPieChart(hillary, trump, gary, jill, harambe):
         'layout': {'title': 'Number Of Tweets About Each "Presidential Candidate" for 2016'}
          }
 
-    py.iplot(fig)
+    
+    py.iplot(fig, filename = 'PieChart')
 
 def scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j):
     x, y, z = (np.array([sentiVariable(j),range((len(hillary) + len(trump) + len(gary) + len(jill) + len(harambe))),scatVariable(j)]))
@@ -221,7 +243,9 @@ def scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, s
             r=0,
             b=0,
             t=0
-        )
+        ),
+
+        title = 'Sentiment Ratings For Each Tweet'
     )
     fig = go.Figure(data=data, layout=layout)
     py.iplot(fig, filename='scatter-colorscale')
@@ -316,9 +340,9 @@ if __name__ == "__main__":
             #waits a minute before refreshing data
 
             scatVariable(j)
-            #polarBar(hillary, trump, gary, jill, harambe)
+            polarBar(hillary, trump, gary, jill, harambe)
             scatter3d(hillary, trump, gary, jill, harambe, statusHillary, statusTrump, statusGary, statusJill, statusHarambe, j)
-            #newPieChart(hillary, trump, gary, jill, harambe)
+            newPieChart(hillary, trump, gary, jill, harambe)
             time.sleep(60)
 
     except KeyboardInterrupt:
